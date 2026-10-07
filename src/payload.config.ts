@@ -9,6 +9,8 @@ import sharp from 'sharp'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+import { Articles } from './collections/Articles'
+import { Sections } from './collections/Sections'
 import { allowedOrigins, isProduction, resolveS3Settings } from './lib/env'
 
 const filename = fileURLToPath(import.meta.url)
@@ -34,7 +36,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Articles, Sections],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
