@@ -85,20 +85,8 @@ export const Users: CollectionConfig = {
           value: 'editor',
         },
         {
-          label: 'Copy',
-          value: 'copy',
-        },
-        {
-          label: 'Contributor',
-          value: 'contributor',
-        },
-        {
           label: 'Author',
           value: 'author',
-        },
-        {
-          label: 'PR',
-          value: 'pr',
         },
       ],
       defaultValue: 'user',
@@ -109,7 +97,7 @@ export const Users: CollectionConfig = {
       name: 'phoneNumber',
       label: 'Phone Number',
       type: 'text',
-      required: true, // Required field
+      required: false, // Optional field
     },
   ],
 }

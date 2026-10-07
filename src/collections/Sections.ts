@@ -64,8 +64,8 @@ export const Sections: CollectionConfig = {
             if (user.Role === 'admin') {
               return true
             }
-            // Editors or Copy writers can update
-            if (user.Role === 'editor' || user.Role === 'copy') {
+            // Editors can update
+            if (user.Role === 'editor') {
               return true
             }
           }

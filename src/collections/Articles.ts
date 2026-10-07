@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import isAdminEditorCopyorOwner from './access/isAdminCopyorOwner'
+import isAdminEditorOrOwner from './access/isAdminEditorOrOwner'
 import isAdminEditororAuthor from './access/isAdminEditororAuthor'
-import isAdminEditorOrCopy from './access/isAdminEditorOrCopy'
+import isAdminOrEditor from './access/isAdminOrEditor'
 import { createPublishingGatekeeperHook, createStateMachineHook } from '../utils/stateMachine'
 
 const articleStateMachine = createStateMachineHook({
@@ -60,7 +60,7 @@ export const Articles: CollectionConfig = {
     read: ({ req: { user } }) => {
       if (user) {
         // Allow access for admin, editor, or copy users to all articles.
-        if (user.Role === 'admin' || user.Role === 'editor' || user.Role === 'copy') return true
+        if (user.Role === 'admin' || user.Role === 'editor') return true
         // For other users, allow access only to articles they own.
         return {
           owner: {
@@ -77,7 +77,7 @@ export const Articles: CollectionConfig = {
       } as any
     },
     /** Defines who can update articles. Uses a custom access control function. */
-    update: isAdminEditorCopyorOwner,
+    update: isAdminEditorOrOwner,
     /** Defines who can delete articles. */
     delete: ({ req: { user } }) => {
       // Allow delete access only if the user has the 'admin' role
@@ -171,7 +171,7 @@ export const Articles: CollectionConfig = {
         update: ({ req: { user } }) => {
           if (user) {
             if (user.Role === 'admin') return true
-            if (user.Role === 'editor' || user.Role === 'copy') return true
+            if (user.Role === 'editor') return true
           }
           return false
         },
@@ -179,7 +179,7 @@ export const Articles: CollectionConfig = {
         create: ({ req: { user } }) => {
           if (user) {
             if (user.Role === 'admin') return true
-            if (user.Role === 'editor' || user.Role === 'copy') return true
+            if (user.Role === 'editor') return true
           }
           return false
         },
@@ -204,7 +204,7 @@ export const Articles: CollectionConfig = {
         update: ({ req: { user } }) => {
           if (user) {
             if (user.Role === 'admin') return true
-            if (user.Role === 'editor' || user.Role === 'copy') return true
+            if (user.Role === 'editor') return true
           }
           return false
         },
@@ -212,7 +212,7 @@ export const Articles: CollectionConfig = {
         create: ({ req: { user } }) => {
           if (user) {
             if (user.Role === 'admin') return true
-            if (user.Role === 'editor' || user.Role === 'copy') return true
+            if (user.Role === 'editor') return true
           }
           return false
         },
