@@ -152,10 +152,22 @@ export const Articles: CollectionConfig = {
       name: 'Author',
       type: 'relationship',
       relationTo: 'users',
-      defaultValue: ({ user }) => user?.id,
-      hasMany: true,
+      hasMany: false, // Single author only
+      defaultValue: ({ user }) => user?.id, // Auto-set to current user
       required: true,
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        // Field is visible (not readOnly) to show assigned author
+      },
+      access: {
+        read: () => true, // Everyone can see the author
+        create: () => true, // Allow on create (uses defaultValue)
+        update: ({ req: { user } }) => {
+          // Only admin or editor can change the author
+          if (!user) return false
+          return user.Role === 'admin' || user.Role === 'editor'
+        },
+      },
     },
     {
       /** Relationship field to link articles to sections. */
@@ -165,25 +177,6 @@ export const Articles: CollectionConfig = {
       relationTo: 'sections',
       hasMany: false,
       required: true,
-      access: {
-        /** All users can read the section relationship. */
-        read: () => true,
-        update: ({ req: { user } }) => {
-          if (user) {
-            if (user.Role === 'admin') return true
-            if (user.Role === 'editor') return true
-          }
-          return false
-        },
-        /** Defines who can create/set the section relationship. */
-        create: ({ req: { user } }) => {
-          if (user) {
-            if (user.Role === 'admin') return true
-            if (user.Role === 'editor') return true
-          }
-          return false
-        },
-      },
       admin: {
         position: 'sidebar',
       },
@@ -198,28 +191,9 @@ export const Articles: CollectionConfig = {
       ],
       defaultValue: 'no',
       required: true,
-      access: {
-        /** All users can read the section relationship. */
-        read: () => true,
-        update: ({ req: { user } }) => {
-          if (user) {
-            if (user.Role === 'admin') return true
-            if (user.Role === 'editor') return true
-          }
-          return false
-        },
-        /** Defines who can create/set the section relationship. */
-        create: ({ req: { user } }) => {
-          if (user) {
-            if (user.Role === 'admin') return true
-            if (user.Role === 'editor') return true
-          }
-          return false
-        },
+      admin: {
+        position: 'sidebar',
       },
-  admin: {
-    position: 'sidebar',
-  },
     },
 
     {
