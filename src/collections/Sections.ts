@@ -14,24 +14,11 @@ export const Sections: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      async ({ data, originalDoc, operation }) => {
-        let currentSectionNameArray
-        // Check if 'Section Name' is being updated in the current operation
-        if (data.sectionName !== undefined) {
-          currentSectionNameArray = data.sectionName
-        } else if (operation === 'update') {
-          // If not updated, use the value from the original document (for updates)
-          currentSectionNameArray = originalDoc?.sectionName
-        }
-
-        if (
-          currentSectionNameArray &&
-          Array.isArray(currentSectionNameArray) &&
-          currentSectionNameArray.length > 0
-        ) {
-          data.primaryTitle = currentSectionNameArray[0]?.Title || null
+      async ({ data }) => {
+        if (data.sectionName?.Title) {
+          data.primaryTitle = data.sectionName.Title
         } else {
-          data.primaryTitle = null // Clear if 'Section Name' is empty or invalid
+          data.primaryTitle = null
         }
         return data
       },
@@ -39,11 +26,8 @@ export const Sections: CollectionConfig = {
     afterRead: [
       async ({ doc }) => {
         // If primaryTitle is missing (i.e., for a legacy document), generate it for display.
-        if (!doc.primaryTitle) {
-          const sectionNameArray = doc.sectionName
-          if (sectionNameArray && Array.isArray(sectionNameArray) && sectionNameArray.length > 0) {
-            doc.primaryTitle = sectionNameArray[0]?.Title || null
-          }
+        if (!doc.primaryTitle && doc.sectionName?.Title) {
+          doc.primaryTitle = doc.sectionName.Title
         }
         return doc
       },
@@ -53,27 +37,7 @@ export const Sections: CollectionConfig = {
     {
       name: 'sectionName',
       label: 'Section Name',
-      type: 'array',
-      minRows: 1,
-      maxRows: 5,
-      access: {
-        read: () => true,
-        create: ({ req: { user } }) => {
-          if (user) {
-            // Admins can always update
-            if (user.Role === 'admin') {
-              return true
-            }
-            // Editors can update
-            if (user.Role === 'editor') {
-              return true
-            }
-          }
-          // Deny for all other users or if no user is logged in
-          return false
-        },
-      },
-
+      type: 'group',
       fields: [
         {
           name: 'Title',
