@@ -67,6 +67,21 @@ export const Media: CollectionConfig = {
       type: 'textarea',
     },
     {
+      name: 'internalNotes',
+      label: 'Internal Notes',
+      type: 'textarea',
+      access: {
+        read: ({ req: { user } }) => {
+          if (!user) return false
+          return user.Role === 'admin' || user.Role === 'editor'
+        },
+        update: ({ req: { user } }) => {
+          if (!user) return false
+          return user.Role === 'admin' || user.Role === 'editor'
+        },
+      },
+    },
+    {
       name: 'mediaCreditWarning',
       label: 'Media Credit Notice',
       type: 'text', // Using a simple text field to display the warning.
