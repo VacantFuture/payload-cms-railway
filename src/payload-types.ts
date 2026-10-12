@@ -181,6 +181,7 @@ export interface Media {
   id: number;
   alt: string;
   caption?: string | null;
+  internalNotes?: string | null;
   /**
    * This notice appears if media credit information is entered in multiple sections below.
    */
@@ -301,7 +302,7 @@ export interface Article {
     [k: string]: unknown;
   } | null;
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
-  Author: (number | User)[];
+  Author: number | User;
   section: number | Section;
   sectionFeatured: 'yes' | 'no';
   /**
@@ -318,13 +319,10 @@ export interface Article {
  */
 export interface Section {
   id: number;
-  sectionName?:
-    | {
-        Title?: string | null;
-        Description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  sectionName?: {
+    Title?: string | null;
+    Description?: string | null;
+  };
   primaryTitle?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -568,6 +566,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  internalNotes?: T;
   mediaCreditWarning?: T;
   user?: T;
   firstName?: T;
@@ -702,7 +701,6 @@ export interface SectionsSelect<T extends boolean = true> {
     | {
         Title?: T;
         Description?: T;
-        id?: T;
       };
   primaryTitle?: T;
   updatedAt?: T;
