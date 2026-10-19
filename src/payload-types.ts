@@ -158,7 +158,7 @@ export interface User {
   profilePicture?: (number | null) | Media;
   fullName?: string | null;
   Role: 'admin' | 'user' | 'editor' | 'copy' | 'contributor' | 'author' | 'pr';
-  phoneNumber: string;
+  phoneNumber?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;

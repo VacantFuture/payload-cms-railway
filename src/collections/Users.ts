@@ -109,7 +109,7 @@ export const Users: CollectionConfig = {
       name: 'phoneNumber',
       label: 'Phone Number',
       type: 'text',
-      required: true, // Required field
+      required: false, // Optional field
     },
   ],
 }
