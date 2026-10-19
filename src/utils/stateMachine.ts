@@ -1,5 +1,5 @@
-import type { BeforeChangeHook } from 'payload'
-import { Forbidden } from 'payload'
+import type { CollectionBeforeChangeHook } from 'payload'
+import { Forbidden, APIError } from 'payload'
 
 /**
  * Configuration for the state machine hook.
@@ -24,10 +24,10 @@ export interface StateMachineConfig {
  * It validates state transitions based on the user's role and the provided configuration.
  *
  * @param config - The state machine configuration.
- * @returns A `BeforeChangeHook` function.
+ * @returns A `CollectionBeforeChangeHook` function.
  */
 export const createStateMachineHook =
-  (config: StateMachineConfig): BeforeChangeHook =>
+  (config: StateMachineConfig): CollectionBeforeChangeHook =>
   async ({ data, req, operation, originalDoc }) => {
     // This hook only applies to updates
     if (operation !== 'update') {
@@ -35,17 +35,18 @@ export const createStateMachineHook =
     }
 
     const user = req.user
-    if (!user) throw new Forbidden()
+    if (!user) throw new Forbidden(req.t)
 
-    const originalState = originalDoc?.[config.stateField]
-    const newState = data?.[config.stateField]
+    const originalState = originalDoc?.[config.stateField] as string | undefined
+    const newState = data?.[config.stateField] as string | undefined
 
-    // If the state hasn't changed, no need to validate the transition.
-    if (originalState === newState) {
+    // If the state hasn't changed or is unknown, no need to validate the transition.
+    if (originalState === newState || !originalState || !newState) {
       return data
     }
 
-    const userRole = user.Role as string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userRole = (user as any).Role as string
 
     // Admins can always transition between any state.
     if (userRole === 'admin') {
@@ -54,13 +55,17 @@ export const createStateMachineHook =
 
     const userTransitions = config.transitions[userRole]
     if (!userTransitions) {
-      throw new Forbidden(`Your role "${userRole}" has no defined state transitions.`)
+      throw new APIError(
+        `Your role "${userRole}" has no defined state transitions.`,
+        403,
+      )
     }
 
     const allowedNextStates = userTransitions[originalState]
     if (!allowedNextStates || !allowedNextStates.includes(newState)) {
-      throw new Forbidden(
+      throw new APIError(
         `As a(n) ${userRole}, you cannot move this document from "${originalState}" to "${newState}".`,
+        403,
       )
     }
 
@@ -85,27 +90,36 @@ export interface PublishingGatekeeperConfig {
  * the `_status` can be set to 'published'.
  *
  * @param config - The publishing gatekeeper configuration.
- * @returns A `BeforeChangeHook` function.
+ * @returns A `CollectionBeforeChangeHook` function.
  */
 export const createPublishingGatekeeperHook =
-  (config: PublishingGatekeeperConfig): BeforeChangeHook =>
+  (config: PublishingGatekeeperConfig): CollectionBeforeChangeHook =>
   async ({ data, req, operation, originalDoc }) => {
     const user = req.user
-    if (!user) throw new Forbidden()
+    if (!user) throw new Forbidden(req.t)
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userData = user as any
 
     const isPublishing =
-      operation === 'update' && data._status === 'published' && originalDoc?._status !== 'published'
+      operation === 'update' &&
+      (data._status as string) === 'published' &&
+      (originalDoc?._status as string) !== 'published'
 
     if (isPublishing) {
       // Check 1: Does the user have a role that is allowed to publish?
-      if (!config.publishingRoles.includes(user.Role as string)) {
-        throw new Forbidden('You do not have permission to publish this document.')
+      if (!config.publishingRoles.includes(userData.Role as string)) {
+        throw new APIError(
+          'You do not have permission to publish this document.',
+          403,
+        )
       }
 
       // Check 2: Is the document in the required state to be published?
-      if (data[config.stateField] !== config.approvedState) {
-        throw new Forbidden(
+      if ((data[config.stateField] as string) !== config.approvedState) {
+        throw new APIError(
           `Document must be in the "${config.approvedState}" state to be published.`,
+          403,
         )
       }
     }
