@@ -316,9 +316,14 @@ export interface Article {
   publishedAt?: string | null;
   readingTime?: number | null;
   imageAspect?: string | null;
-  cardAuthor?: string | null;
-  displayDate?: string | null;
-  cardTag?: string | null;
+  workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
+  Author: (number | User)[];
+  section: number | Section;
+  sectionFeatured: 'yes' | 'no';
+  /**
+   * This is the owner of the article
+   */
+  owner?: (number | null) | User;
   tags?:
     | {
         label: string;
@@ -328,14 +333,6 @@ export interface Article {
     | null;
   order?: number | null;
   featured?: boolean | null;
-  workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
-  Author: (number | User)[];
-  section: number | Section;
-  sectionFeatured: 'yes' | 'no';
-  /**
-   * This is the owner of the article
-   */
-  owner?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -842,9 +839,11 @@ export interface ArticlesSelect<T extends boolean = true> {
   publishedAt?: T;
   readingTime?: T;
   imageAspect?: T;
-  cardAuthor?: T;
-  displayDate?: T;
-  cardTag?: T;
+  workflowStatus?: T;
+  Author?: T;
+  section?: T;
+  sectionFeatured?: T;
+  owner?: T;
   tags?:
     | T
     | {
@@ -854,11 +853,6 @@ export interface ArticlesSelect<T extends boolean = true> {
       };
   order?: T;
   featured?: T;
-  workflowStatus?: T;
-  Author?: T;
-  section?: T;
-  sectionFeatured?: T;
-  owner?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

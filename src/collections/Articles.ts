@@ -227,86 +227,6 @@ export const Articles: CollectionConfig = {
             },
           ],
         },
-        {
-          label: 'Card Details',
-          description: 'Fields controlling how the article appears in card-based layouts.',
-          fields: [
-            /** Author name displayed on the card (may differ from Author relationship). */
-            {
-              name: 'cardAuthor',
-              label: 'Card Author',
-              type: 'text',
-              admin: {
-                placeholder: 'Author name shown on card',
-              },
-            },
-            /** Formatted date string for card display (e.g., "Oct 24, 2024"). */
-            {
-              name: 'displayDate',
-              label: 'Display Date',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., Oct 24, 2024',
-              },
-            },
-            /** Tag displayed on the card (e.g., "Featured", "New"). */
-            {
-              name: 'cardTag',
-              label: 'Card Tag',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., Featured, New, Exclusive',
-              },
-            },
-            /** Array of tag objects with label and href for card/category navigation. */
-            {
-              name: 'tags',
-              label: 'Tags',
-              type: 'array',
-              fields: [
-                {
-                  name: 'label',
-                  label: 'Label',
-                  type: 'text',
-                  required: true,
-                  maxLength: 50,
-                },
-                {
-                  name: 'href',
-                  label: 'Link',
-                  type: 'text',
-                  maxLength: 200,
-                  admin: {
-                    placeholder: '/tag/slug or https://...',
-                  },
-                },
-              ],
-              minRows: 0,
-              maxRows: 10,
-              labels: {
-                singular: 'Tag',
-                plural: 'Tags',
-              },
-            },
-            /** Manual sort order for articles. Lower numbers appear first. */
-            {
-              name: 'order',
-              label: 'Order',
-              type: 'number',
-              min: 0,
-              admin: {
-                placeholder: 'Optional — lower numbers sort first',
-              },
-            },
-            /** Whether this article is featured in highlighted sections. */
-            {
-              name: 'featured',
-              label: 'Featured',
-              type: 'checkbox',
-              defaultValue: false,
-            },
-          ],
-        },
       ],
     },
     {
@@ -378,6 +298,60 @@ export const Articles: CollectionConfig = {
         // position: 'sidebar',
         // readOnly: true,
         description: 'This is the owner of the article',
+      },
+    },
+    /** Array of tag objects with label and href for card/category navigation. */
+    {
+      name: 'tags',
+      label: 'Tags',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          label: 'Label',
+          type: 'text',
+          required: true,
+          maxLength: 50,
+        },
+        {
+          name: 'href',
+          label: 'Link',
+          type: 'text',
+          maxLength: 200,
+          admin: {
+            placeholder: '/tag/slug or https://...',
+          },
+        },
+      ],
+      minRows: 0,
+      maxRows: 10,
+      labels: {
+        singular: 'Tag',
+        plural: 'Tags',
+      },
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    /** Manual sort order for articles. Lower numbers appear first. */
+    {
+      name: 'order',
+      label: 'Order',
+      type: 'number',
+      min: 0,
+      admin: {
+        position: 'sidebar',
+        placeholder: 'Optional — lower numbers sort first',
+      },
+    },
+    /** Whether this article is featured in highlighted sections. */
+    {
+      name: 'featured',
+      label: 'Featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
       },
     },
   ],
