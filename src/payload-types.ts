@@ -159,6 +159,8 @@ export interface User {
   fullName?: string | null;
   Role: 'admin' | 'user' | 'editor' | 'copy' | 'contributor' | 'author' | 'pr';
   phoneNumber?: string | null;
+  authorRole?: string | null;
+  authorAffiliation?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -294,6 +296,7 @@ export interface Article {
   title: string;
   slug: string;
   deck: string;
+  readingTime?: number | null;
   body?: {
     root: {
       type: string;
@@ -309,13 +312,6 @@ export interface Article {
     };
     [k: string]: unknown;
   } | null;
-  category?: string | null;
-  authorRole?: string | null;
-  authorAffiliation?: string | null;
-  authorUrl?: string | null;
-  publishedAt?: string | null;
-  readingTime?: number | null;
-  imageAspect?: string | null;
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
   Author: (number | User)[];
   section: number | Section;
@@ -636,6 +632,8 @@ export interface UsersSelect<T extends boolean = true> {
   fullName?: T;
   Role?: T;
   phoneNumber?: T;
+  authorRole?: T;
+  authorAffiliation?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -831,14 +829,8 @@ export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   deck?: T;
-  body?: T;
-  category?: T;
-  authorRole?: T;
-  authorAffiliation?: T;
-  authorUrl?: T;
-  publishedAt?: T;
   readingTime?: T;
-  imageAspect?: T;
+  body?: T;
   workflowStatus?: T;
   Author?: T;
   section?: T;

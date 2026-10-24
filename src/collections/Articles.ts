@@ -147,65 +147,7 @@ export const Articles: CollectionConfig = {
                 placeholder: 'Brief introductory text for the article',
               },
             },
-            /** Rich text editor for the main body of the article. */
-            { name: 'body', type: 'richText' },
-          ],
-        },
-        {
-          label: 'Frontmatter',
-          description: 'Metadata fields from article frontmatter for content enrichment.',
-          fields: [
-            /** Article category for grouping and navigation. */
-            {
-              name: 'category',
-              label: 'Category',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., Technology, Health, Business',
-              },
-            },
-            /** Author's role or job title. */
-            {
-              name: 'authorRole',
-              label: 'Author Role',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., Senior Editor, Chief Analyst',
-              },
-            },
-            /** Author's affiliated organization or institution. */
-            {
-              name: 'authorAffiliation',
-              label: 'Author Affiliation',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., Harvard University, Forbes',
-              },
-            },
-            /** Author's personal website or profile URL. */
-            {
-              name: 'authorUrl',
-              label: 'Author URL',
-              type: 'text',
-              admin: {
-                placeholder: 'https://',
-              },
-            },
-            /**
-             * Explicit publish date (separate from createdAt).
-             * Useful when the publish date differs from creation.
-             */
-            {
-              name: 'publishedAt',
-              label: 'Published At',
-              type: 'date',
-              admin: {
-                date: {
-                  pickerAppearance: 'dayAndTime',
-                },
-              },
-            },
-            /** Estimated reading time in minutes. */
+            /** Estimated reading time in minutes. Appears between deck and body for quick content scanning. */
             {
               name: 'readingTime',
               label: 'Reading Time (minutes)',
@@ -216,15 +158,8 @@ export const Articles: CollectionConfig = {
                 placeholder: 'Auto-calculated or manual entry',
               },
             },
-            /** Aspect ratio for article image display (e.g., '16/9', '4/3', '1/1'). */
-            {
-              name: 'imageAspect',
-              label: 'Image Aspect Ratio',
-              type: 'text',
-              admin: {
-                placeholder: 'e.g., 16/9, 4/3, 1/1',
-              },
-            },
+            /** Rich text editor for the main body of the article. */
+            { name: 'body', type: 'richText' },
           ],
         },
       ],

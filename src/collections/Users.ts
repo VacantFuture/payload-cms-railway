@@ -111,5 +111,25 @@ export const Users: CollectionConfig = {
       type: 'text',
       required: false, // Optional field
     },
+    {
+      name: 'authorRole',
+      label: 'Author Role',
+      type: 'text',
+      required: false, // Optional field
+      admin: {
+        placeholder: 'e.g. Senior Editor, Chief Analyst',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'authorAffiliation',
+      label: 'Author Affiliation',
+      type: 'text',
+      required: false, // Optional field
+      admin: {
+        placeholder: 'e.g. Harvard University, Forbes',
+        position: 'sidebar',
+      },
+    },
   ],
 }
