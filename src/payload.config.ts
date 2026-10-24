@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
@@ -88,6 +89,25 @@ export default buildConfig({
         region: s3?.region ?? 'auto',
       },
       enabled: Boolean(s3),
+    }),
+    seoPlugin({
+      collections: ['Articles'],
+      uploadsCollection: 'media',
+      tabbedUI: true,
+      generateTitle: ({ doc }) => {
+        return doc?.title ? `${doc.title} — DSA High Peaks` : ''
+      },
+      generateDescription: ({ doc }) => {
+        return doc?.deck || ''
+      },
+      generateImage: ({ doc }) => {
+        return doc?.mainImage?.id || null
+      },
+      generateURL: ({ doc }) => {
+        return doc?.slug
+          ? `https://dsahighpeaks.org/articles/${doc.slug}`
+          : 'https://dsahighpeaks.org/articles'
+      },
     }),
   ],
 })

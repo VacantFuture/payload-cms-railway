@@ -312,6 +312,14 @@ export interface Article {
     };
     [k: string]: unknown;
   } | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
   Author: (number | User)[];
   section: number | Section;
@@ -831,6 +839,13 @@ export interface ArticlesSelect<T extends boolean = true> {
   deck?: T;
   readingTime?: T;
   body?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   workflowStatus?: T;
   Author?: T;
   section?: T;
