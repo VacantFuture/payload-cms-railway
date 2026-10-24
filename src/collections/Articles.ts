@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+
 import isAdminEditorCopyorOwner from './access/isAdminCopyorOwner'
 import isAdminEditororAuthor from './access/isAdminEditororAuthor'
 import isAdminEditorOrCopy from './access/isAdminEditorOrCopy'
