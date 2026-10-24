@@ -21,6 +21,7 @@ const articlePublishingGatekeeper = createPublishingGatekeeperHook({
   approvedState: 'approved',
   publishingRoles: ['admin', 'editor'],
 })
+
 /**
  * Collection configuration for Articles.
  * Defines the schema, access control, hooks, and admin UI behavior for articles.
@@ -116,19 +117,196 @@ export const Articles: CollectionConfig = {
             },
             /** Text field for the article title. */
             { name: 'title', type: 'text', maxLength: 60, required: true },
-            /** Textarea for a short excerpt or summary of the article. */
-            { name: 'excerpt', type: 'textarea', minLength: 90, maxLength: 150, required: true },
+            /**
+             * URL-friendly slug for routing (e.g., `/articles/[slug]`).
+             * Auto-generated from title by default; manually editable.
+             */
+            {
+              name: 'slug',
+              label: 'Slug',
+              type: 'text',
+              required: true,
+              unique: true,
+              admin: {
+                position: 'sidebar',
+                placeholder: 'auto-generated-from-title',
+              },
+            },
+            /**
+             * Short introductory text — primary excerpt/summary for the article.
+             * Appears above the body to set context before the main content.
+             */
+            {
+              name: 'deck',
+              label: 'Deck',
+              type: 'textarea',
+              minLength: 90,
+              maxLength: 150,
+              required: true,
+              admin: {
+                placeholder: 'Brief introductory text for the article',
+              },
+            },
             /** Rich text editor for the main body of the article. */
             { name: 'body', type: 'richText' },
           ],
         },
-        // You can add more tabs here if needed
-        // {
-        //   label: 'SEO',
-        //   fields: [
-        //     // SEO related fields, or use the seoPlugin which might handle its own tab/placement
-        //   ],
-        // },
+        {
+          label: 'Frontmatter',
+          description: 'Metadata fields from article frontmatter for content enrichment.',
+          fields: [
+            /** Article category for grouping and navigation. */
+            {
+              name: 'category',
+              label: 'Category',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., Technology, Health, Business',
+              },
+            },
+            /** Author's role or job title. */
+            {
+              name: 'authorRole',
+              label: 'Author Role',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., Senior Editor, Chief Analyst',
+              },
+            },
+            /** Author's affiliated organization or institution. */
+            {
+              name: 'authorAffiliation',
+              label: 'Author Affiliation',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., Harvard University, Forbes',
+              },
+            },
+            /** Author's personal website or profile URL. */
+            {
+              name: 'authorUrl',
+              label: 'Author URL',
+              type: 'text',
+              admin: {
+                placeholder: 'https://',
+              },
+            },
+            /**
+             * Explicit publish date (separate from createdAt).
+             * Useful when the publish date differs from creation.
+             */
+            {
+              name: 'publishedAt',
+              label: 'Published At',
+              type: 'date',
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+              },
+            },
+            /** Estimated reading time in minutes. */
+            {
+              name: 'readingTime',
+              label: 'Reading Time (minutes)',
+              type: 'number',
+              min: 1,
+              max: 120,
+              admin: {
+                placeholder: 'Auto-calculated or manual entry',
+              },
+            },
+            /** Aspect ratio for article image display (e.g., '16/9', '4/3', '1/1'). */
+            {
+              name: 'imageAspect',
+              label: 'Image Aspect Ratio',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., 16/9, 4/3, 1/1',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Card Details',
+          description: 'Fields controlling how the article appears in card-based layouts.',
+          fields: [
+            /** Author name displayed on the card (may differ from Author relationship). */
+            {
+              name: 'cardAuthor',
+              label: 'Card Author',
+              type: 'text',
+              admin: {
+                placeholder: 'Author name shown on card',
+              },
+            },
+            /** Formatted date string for card display (e.g., "Oct 24, 2024"). */
+            {
+              name: 'displayDate',
+              label: 'Display Date',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., Oct 24, 2024',
+              },
+            },
+            /** Tag displayed on the card (e.g., "Featured", "New"). */
+            {
+              name: 'cardTag',
+              label: 'Card Tag',
+              type: 'text',
+              admin: {
+                placeholder: 'e.g., Featured, New, Exclusive',
+              },
+            },
+            /** Array of tag objects with label and href for card/category navigation. */
+            {
+              name: 'tags',
+              label: 'Tags',
+              type: 'array',
+              fields: [
+                {
+                  name: 'label',
+                  label: 'Label',
+                  type: 'text',
+                  required: true,
+                  maxLength: 50,
+                },
+                {
+                  name: 'href',
+                  label: 'Link',
+                  type: 'text',
+                  maxLength: 200,
+                  admin: {
+                    placeholder: '/tag/slug or https://...',
+                  },
+                },
+              ],
+              minRows: 0,
+              maxRows: 10,
+              labels: {
+                singular: 'Tag',
+                plural: 'Tags',
+              },
+            },
+            /** Manual sort order for articles. Lower numbers appear first. */
+            {
+              name: 'order',
+              label: 'Order',
+              type: 'number',
+              min: 0,
+              admin: {
+                placeholder: 'Optional — lower numbers sort first',
+              },
+            },
+            /** Whether this article is featured in highlighted sections. */
+            {
+              name: 'featured',
+              label: 'Featured',
+              type: 'checkbox',
+              defaultValue: false,
+            },
+          ],
+        },
       ],
     },
     {

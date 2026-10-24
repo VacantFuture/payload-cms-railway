@@ -292,7 +292,8 @@ export interface Article {
   id: number;
   mainImage?: (number | null) | Media;
   title: string;
-  excerpt: string;
+  slug: string;
+  deck: string;
   body?: {
     root: {
       type: string;
@@ -308,6 +309,25 @@ export interface Article {
     };
     [k: string]: unknown;
   } | null;
+  category?: string | null;
+  authorRole?: string | null;
+  authorAffiliation?: string | null;
+  authorUrl?: string | null;
+  publishedAt?: string | null;
+  readingTime?: number | null;
+  imageAspect?: string | null;
+  cardAuthor?: string | null;
+  displayDate?: string | null;
+  cardTag?: string | null;
+  tags?:
+    | {
+        label: string;
+        href?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  featured?: boolean | null;
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
   Author: (number | User)[];
   section: number | Section;
@@ -812,8 +832,28 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ArticlesSelect<T extends boolean = true> {
   mainImage?: T;
   title?: T;
-  excerpt?: T;
+  slug?: T;
+  deck?: T;
   body?: T;
+  category?: T;
+  authorRole?: T;
+  authorAffiliation?: T;
+  authorUrl?: T;
+  publishedAt?: T;
+  readingTime?: T;
+  imageAspect?: T;
+  cardAuthor?: T;
+  displayDate?: T;
+  cardTag?: T;
+  tags?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  order?: T;
+  featured?: T;
   workflowStatus?: T;
   Author?: T;
   section?: T;
