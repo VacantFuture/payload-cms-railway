@@ -156,6 +156,7 @@ export interface User {
   firstName: string;
   lastName: string;
   profilePicture?: (number | null) | Media;
+  bio?: string | null;
   fullName?: string | null;
   Role: 'admin' | 'user' | 'editor' | 'copy' | 'contributor' | 'author' | 'pr';
   phoneNumber?: string | null;
@@ -634,6 +635,7 @@ export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
   profilePicture?: T;
+  bio?: T;
   fullName?: T;
   Role?: T;
   phoneNumber?: T;

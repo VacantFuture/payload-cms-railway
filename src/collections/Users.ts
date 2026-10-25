@@ -60,6 +60,16 @@ export const Users: CollectionConfig = {
       },
     },
     {
+      name: 'bio',
+      label: 'Short Bio',
+      type: 'textarea',
+      required: false,
+      admin: {
+        placeholder: 'Brief biography (appears on author bylines)',
+        rows: 4,
+      },
+    },
+    {
       name: 'fullName',
       label: 'Full Name',
       type: 'text',
