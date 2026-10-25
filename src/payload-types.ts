@@ -294,6 +294,10 @@ export interface Article {
   id: number;
   mainImage?: (number | null) | Media;
   title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
   slug: string;
   deck: string;
   readingTime?: number | null;
@@ -827,6 +831,7 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ArticlesSelect<T extends boolean = true> {
   mainImage?: T;
   title?: T;
+  generateSlug?: T;
   slug?: T;
   deck?: T;
   readingTime?: T;

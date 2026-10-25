@@ -1,3 +1,4 @@
+import { slugField } from 'payload'
 import type { CollectionConfig } from 'payload'
 import isAdminEditorCopyorOwner from './access/isAdminCopyorOwner'
 import isAdminEditororAuthor from './access/isAdminEditororAuthor'
@@ -117,21 +118,10 @@ export const Articles: CollectionConfig = {
             },
             /** Text field for the article title. */
             { name: 'title', type: 'text', maxLength: 60, required: true },
-            /**
-             * URL-friendly slug for routing (e.g., `/articles/[slug]`).
-             * Auto-generated from title by default; manually editable.
-             */
-            {
-              name: 'slug',
-              label: 'Slug',
-              type: 'text',
+            slugField({
+              position: 'sidebar',
               required: true,
-              unique: true,
-              admin: {
-                position: 'sidebar',
-                placeholder: 'auto-generated-from-title',
-              },
-            },
+            }),
             /**
              * Short introductory text — primary excerpt/summary for the article.
              * Appears above the body to set context before the main content.
