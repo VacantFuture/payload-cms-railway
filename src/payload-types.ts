@@ -73,6 +73,7 @@ export interface Config {
     documents: Document;
     projects: Project;
     Articles: Article;
+    tags: Tag;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -98,6 +99,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     Articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -443,6 +445,20 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  tagName?: {
+    Title?: string | null;
+    Description?: string | null;
+  };
+  primaryTitle?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -580,6 +596,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'Articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -857,6 +877,21 @@ export interface ArticlesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  tagName?:
+    | T
+    | {
+        Title?: T;
+        Description?: T;
+      };
+  primaryTitle?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -13,6 +13,8 @@ import { Section } from './collections/Sections'
 import { Documents } from './collections/Documents'
 import { Projects } from './collections/Projects'
 import { Articles } from './collections/Articles'
+import { Tags } from './collections/Tags'
+
 import { allowedOrigins, isProduction, resolveS3Settings } from './lib/env'
 
 const filename = fileURLToPath(import.meta.url)
@@ -38,7 +40,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Section, Documents, Projects, Articles],
+  collections: [Users, Media, Section, Documents, Projects, Articles, Tags],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
