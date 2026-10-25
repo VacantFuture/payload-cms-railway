@@ -3,9 +3,9 @@ import { ValidationError } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-
+  
   admin: {
-    useAsTitle: 'alt',
+    useAsTitle: 'mediaTitle',
     description: 'Upload images, videos, and audio files.',
     group: 'Digital Assets',
   },
@@ -56,6 +56,11 @@ export const Media: CollectionConfig = {
     ],
   },
   fields: [
+    {
+      name: 'mediaTitle',
+      type: 'text',
+      required: true,
+    },
     {
       name: 'alt',
       type: 'text',
