@@ -4,6 +4,7 @@ import isAdminEditorCopyorOwner from './access/isAdminCopyorOwner'
 import isAdminEditororAuthor from './access/isAdminEditororAuthor'
 import isAdminEditorOrCopy from './access/isAdminEditorOrCopy'
 import { createPublishingGatekeeperHook, createStateMachineHook } from '../utils/stateMachine'
+import { createMainImageValidationHook } from '../utils/validateMainImageOnPublish'
 
 const articleStateMachine = createStateMachineHook({
   stateField: 'workflowStatus',
@@ -22,6 +23,8 @@ const articlePublishingGatekeeper = createPublishingGatekeeperHook({
   approvedState: 'approved',
   publishingRoles: ['admin', 'editor'],
 })
+
+const articleMainImageValidation = createMainImageValidationHook()
 
 /**
  * Collection configuration for Articles.
@@ -98,6 +101,7 @@ export const Articles: CollectionConfig = {
       articleStateMachine,
       // Apply the publishing gatekeeper to protect the publish action.
       articlePublishingGatekeeper,
+      articleMainImageValidation,
     ],
   },
 
@@ -135,17 +139,6 @@ export const Articles: CollectionConfig = {
               required: true,
               admin: {
                 placeholder: 'Brief introductory text for the article',
-              },
-            },
-            /** Estimated reading time in minutes. Appears between deck and body for quick content scanning. */
-            {
-              name: 'readingTime',
-              label: 'Reading Time (minutes)',
-              type: 'number',
-              min: 1,
-              max: 120,
-              admin: {
-                placeholder: 'Auto-calculated or manual entry',
               },
             },
             /** Rich text editor for the main body of the article. */

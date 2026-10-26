@@ -69,11 +69,11 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    Articles: Article;
     sections: Section;
+    tags: Tag;
     documents: Document;
     projects: Project;
-    Articles: Article;
-    tags: Tag;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -95,11 +95,11 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    Articles: ArticlesSelect<false> | ArticlesSelect<true>;
     sections: SectionsSelect<false> | SectionsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    Articles: ArticlesSelect<false> | ArticlesSelect<true>;
-    tags: TagsSelect<false> | TagsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -304,7 +304,6 @@ export interface Article {
   generateSlug?: boolean | null;
   slug: string;
   deck: string;
-  readingTime?: number | null;
   body?: {
     root: {
       type: string;
@@ -382,6 +381,20 @@ export interface FolderInterface {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  tagName?: {
+    Title?: string | null;
+    Description?: string | null;
+  };
+  primaryTitle?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Upload documents, spreadsheets, and presentations.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -440,20 +453,6 @@ export interface Project {
     | null;
   documentation?: (number | Document)[] | null;
   draftImages?: (number | Media)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  tagName?: {
-    Title?: string | null;
-    Description?: string | null;
-  };
-  primaryTitle?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -582,8 +581,16 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'Articles';
+        value: number | Article;
+      } | null)
+    | ({
         relationTo: 'sections';
         value: number | Section;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'documents';
@@ -592,14 +599,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
-      } | null)
-    | ({
-        relationTo: 'Articles';
-        value: number | Article;
-      } | null)
-    | ({
-        relationTo: 'tags';
-        value: number | Tag;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -795,10 +794,54 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  mainImage?: T;
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  deck?: T;
+  body?: T;
+  workflowStatus?: T;
+  Author?: T;
+  section?: T;
+  sectionFeatured?: T;
+  owner?: T;
+  tags?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  order?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "sections_select".
  */
 export interface SectionsSelect<T extends boolean = true> {
   sectionName?:
+    | T
+    | {
+        Title?: T;
+        Description?: T;
+      };
+  primaryTitle?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  tagName?:
     | T
     | {
         Title?: T;
@@ -845,51 +888,6 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   documentation?: T;
   draftImages?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Articles_select".
- */
-export interface ArticlesSelect<T extends boolean = true> {
-  mainImage?: T;
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  deck?: T;
-  readingTime?: T;
-  body?: T;
-  workflowStatus?: T;
-  Author?: T;
-  section?: T;
-  sectionFeatured?: T;
-  owner?: T;
-  tags?:
-    | T
-    | {
-        label?: T;
-        href?: T;
-        id?: T;
-      };
-  order?: T;
-  featured?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags_select".
- */
-export interface TagsSelect<T extends boolean = true> {
-  tagName?:
-    | T
-    | {
-        Title?: T;
-        Description?: T;
-      };
-  primaryTitle?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -40,7 +40,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Section, Documents, Projects, Articles, Tags],
+  collections: [Users, Media, Articles, Section, Tags, Documents, Projects],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
