@@ -86,7 +86,7 @@ export default buildConfig({
           secretAccessKey: s3?.secretAccessKey ?? '',
         },
         endpoint: s3?.endpoint,
-        forcePathStyle: s3?.forcePathStyle ?? false,
+        forcePathStyle: true,
         region: s3?.region ?? 'auto',
       },
       enabled: Boolean(s3),
