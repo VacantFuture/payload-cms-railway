@@ -169,7 +169,7 @@ export const Articles: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       defaultValue: ({ user }) => user?.id,
-      hasMany: true,
+      hasMany: false,
       required: true,
       admin: { position: 'sidebar' },
     },

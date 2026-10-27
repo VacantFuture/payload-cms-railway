@@ -320,7 +320,7 @@ export interface Article {
     [k: string]: unknown;
   } | null;
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
-  Author: (number | User)[];
+  Author: number | User;
   section: number | Section;
   sectionFeatured: 'yes' | 'no';
   /**
