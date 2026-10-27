@@ -8,6 +8,9 @@ export const Users: CollectionConfig = {
     description: 'Manage system settings, user accounts and roles.',
   },
   auth: true,
+  access: {
+    read: () => true, // Allow public reads so Author relationship populates
+  },
   hooks: {
     // This hook ensures the 'Full Name' is created and saved to the database
     // whenever a user is created or updated.
