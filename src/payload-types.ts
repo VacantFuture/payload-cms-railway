@@ -409,6 +409,7 @@ export interface Document {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -859,6 +860,7 @@ export interface DocumentsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   usedIn?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

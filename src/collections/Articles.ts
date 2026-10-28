@@ -121,7 +121,17 @@ export const Articles: CollectionConfig = {
               admin: { allowCreate: false },
             },
             /** Text field for the article title. */
-            { name: 'title', type: 'text', maxLength: 60, required: true },
+            {
+              name: 'title',
+              type: 'text',
+              maxLength: 60,
+              required: true,
+              admin: {
+                components: {
+                  Description: 'src/components/TitleCharacterCount.tsx',
+                },
+              },
+            },
             slugField({
               position: 'sidebar',
               required: true,
@@ -139,6 +149,9 @@ export const Articles: CollectionConfig = {
               required: true,
               admin: {
                 placeholder: 'Brief introductory text for the article',
+                components: {
+                  Description: 'src/components/DeckCharacterCount.tsx',
+                },
               },
             },
             /** Rich text editor for the main body of the article. */
@@ -230,6 +243,11 @@ export const Articles: CollectionConfig = {
           type: 'text',
           required: true,
           maxLength: 50,
+          admin: {
+            components: {
+              Description: 'src/components/TagLabelCharacterCount.tsx',
+            },
+          },
         },
         {
           name: 'href',
@@ -238,6 +256,9 @@ export const Articles: CollectionConfig = {
           maxLength: 200,
           admin: {
             placeholder: '/tag/slug or https://...',
+            components: {
+              Description: 'src/components/TagHrefCharacterCount.tsx',
+            },
           },
         },
       ],
