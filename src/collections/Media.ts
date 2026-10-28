@@ -163,7 +163,7 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     adminThumbnail: 'thumbnail',
-    disableLocalStorage: true,
+    disableLocalStorage: false,
     displayPreview: true,
     withMetadata: true,
     imageSizes: [

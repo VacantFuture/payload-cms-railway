@@ -25,16 +25,6 @@ const dirname = path.dirname(filename)
 // disk storage. A half-configured bucket throws instead, see resolveS3Settings.
 const s3 = resolveS3Settings()
 
-console.log('[S3] Storage configured:', {
-  bucket: s3?.bucket,
-  endpoint: s3?.endpoint,
-  region: s3?.region,
-  forcePathStyle: s3?.forcePathStyle,
-  credentials: {
-    accessKeyId: s3?.accessKeyId ? '***REDACTED***' : undefined,
-    // secretAccessKey intentionally NOT logged
-  },
-})
 if (!s3 && isProduction) {
   console.warn(
     '[payload] No object storage configured. Uploads will be written to the container ' +
