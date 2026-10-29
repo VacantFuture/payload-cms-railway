@@ -3,7 +3,7 @@ import { ValidationError } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  
+
   admin: {
     useAsTitle: 'mediaTitle',
     description: 'Upload images, videos, and audio files.',
@@ -286,6 +286,27 @@ export const Media: CollectionConfig = {
         },
       },
       {
+        name: 'instagramtall',
+        width: 1080,
+        // By specifying `undefined` or leaving a height undefined,
+        // the image will be sized to a certain width,
+        // but it will retain its original aspect ratio
+        // and calculate a height automatically.
+        height: 1440,
+        position: 'centre',
+        generateImageName: ({ sizeName, extension, height, width, originalName }) => {
+          return `${sizeName}-${height}x${width}-${originalName}.${extension}`
+        },
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 89,
+            nearLossless: true,
+            smartSubsample: true,
+          },
+        },
+      },
+      {
         name: 'twitter',
         width: 1200,
         // By specifying `undefined` or leaving a height undefined,
@@ -314,6 +335,23 @@ export const Media: CollectionConfig = {
         // but it will retain its original aspect ratio
         // and calculate a height automatically.
         height: 1200,
+        position: 'centre',
+        generateImageName: ({ sizeName, extension, height, width, originalName }) => {
+          return `${sizeName}-${height}x${width}-${originalName}.${extension}`
+        },
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 89,
+            nearLossless: true,
+            smartSubsample: true,
+          },
+        },
+      },
+      {
+        name: 'og',
+        width: 1200,
+        height: 630,
         position: 'centre',
         generateImageName: ({ sizeName, extension, height, width, originalName }) => {
           return `${sizeName}-${height}x${width}-${originalName}.${extension}`

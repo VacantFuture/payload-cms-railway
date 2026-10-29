@@ -272,6 +272,14 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
+    instagramtall?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
     twitter?: {
       url?: string | null;
       width?: number | null;
@@ -281,6 +289,14 @@ export interface Media {
       filename?: string | null;
     };
     linkedin?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -771,6 +787,16 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
+        instagramtall?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
         twitter?:
           | T
           | {
@@ -782,6 +808,16 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
         linkedin?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
           | T
           | {
               url?: T;
