@@ -337,6 +337,10 @@ export interface Article {
   } | null;
   workflowStatus: 'draft' | 'inReview' | 'changesRequested' | 'approved';
   Author: number | User;
+  /**
+   * Copied from the author profile when the article is saved. To change it, edit the author.
+   */
+  authorName?: string | null;
   section: number | Section;
   sectionFeatured: 'yes' | 'no';
   /**
@@ -842,6 +846,7 @@ export interface ArticlesSelect<T extends boolean = true> {
   body?: T;
   workflowStatus?: T;
   Author?: T;
+  authorName?: T;
   section?: T;
   sectionFeatured?: T;
   owner?: T;

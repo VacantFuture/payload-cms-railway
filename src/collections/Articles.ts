@@ -38,7 +38,11 @@ export const Articles: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: [
       'title',
-      'author',
+      // Denormalized snapshot of the author's full name. The `Author`
+      // relationship is no longer readable by non-admins (users collection
+      // is locked down), so a relationship column would render raw IDs for
+      // authors the current user cannot read.
+      'authorName',
       'section',
       'status',
       'workflowStatus',
@@ -97,6 +101,33 @@ export const Articles: CollectionConfig = {
   /** Hooks to run at different stages of the document lifecycle. */
   hooks: {
     beforeChange: [
+      // Snapshot the author's full name onto the article. The public site's
+      // bylines read this field so they never depend on read access to the
+      // users collection, which is restricted to admins and the user themself.
+      // Runs on every save where an author is present so renames propagate
+      // when an article is next edited.
+      async ({ data, req }) => {
+        if (data.Author != null) {
+          const authorId =
+            typeof data.Author === 'object' ? data.Author.id : data.Author
+          const author = await req.payload
+            .findByID({
+              collection: 'users',
+              id: authorId,
+              depth: 0,
+              req,
+              // The requesting user (e.g. a non-admin author) may not have
+              // collection-level read access to the user doc; this is a
+              // server-side copy of a single field, not an exposure.
+              overrideAccess: true,
+            })
+            .catch(() => null) // author may have been deleted; keep the existing snapshot
+          if (author?.fullName) {
+            data.authorName = author.fullName
+          }
+        }
+        return data
+      },
       // Apply the state machine hook to enforce transition rules.
       articleStateMachine,
       // Apply the publishing gatekeeper to protect the publish action.
@@ -185,6 +216,23 @@ export const Articles: CollectionConfig = {
       hasMany: false,
       required: true,
       admin: { position: 'sidebar' },
+    },
+    /**
+     * Denormalized snapshot of the author's full name at last save.
+     * Maintained by the beforeChange hook — never edited by hand. The public
+     * site renders bylines from this field because the users collection is
+     * not readable by anonymous requests.
+     */
+    {
+      name: 'authorName',
+      label: 'Author Name',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description:
+          'Copied from the author profile when the article is saved. To change it, edit the author.',
+      },
     },
     {
       /** Relationship field to link articles to sections. */
