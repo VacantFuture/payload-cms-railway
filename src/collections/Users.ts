@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
+import isAdmin from './access/isAdmin'
+import isAdminOrSelf from './access/isAdminOrSelf'
+
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
@@ -9,7 +12,17 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
-    read: () => true, // Allow public reads so Author relationship populates
+    // Locked down: admins manage everyone, logged-in users manage only
+    // themselves, and anonymous requests are denied. Public bylines no longer
+    // depend on reading this collection — Articles carry a denormalized
+    // `authorName` snapshot (see Articles.ts) instead of relying on the
+    // `Author` relationship being populated.
+    read: isAdminOrSelf,
+    update: isAdminOrSelf,
+    // Registration is the create operation in Payload 3; restricting create
+    // to admins closes self-signup as well.
+    create: isAdmin,
+    delete: isAdmin,
   },
   hooks: {
     // This hook ensures the 'Full Name' is created and saved to the database
@@ -84,6 +97,13 @@ export const Users: CollectionConfig = {
     {
       name: 'Role',
       type: 'select',
+      // Role changes are admin-only, including on the user's own profile —
+      // otherwise any logged-in user could promote themselves to admin
+      // through self-service updates.
+      access: {
+        create: isAdmin,
+        update: isAdmin,
+      },
       options: [
         {
           label: 'Admin',
