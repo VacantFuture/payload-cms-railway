@@ -354,7 +354,6 @@ export interface Article {
         id?: string | null;
       }[]
     | null;
-  order?: number | null;
   featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -857,7 +856,6 @@ export interface ArticlesSelect<T extends boolean = true> {
         href?: T;
         id?: T;
       };
-  order?: T;
   featured?: T;
   updatedAt?: T;
   createdAt?: T;

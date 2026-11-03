@@ -320,17 +320,6 @@ export const Articles: CollectionConfig = {
         position: 'sidebar',
       },
     },
-    /** Manual sort order for articles. Lower numbers appear first. */
-    {
-      name: 'order',
-      label: 'Order',
-      type: 'number',
-      min: 0,
-      admin: {
-        position: 'sidebar',
-        placeholder: 'Optional — lower numbers sort first',
-      },
-    },
     /** Whether this article is featured in highlighted sections. */
     {
       name: 'featured',
