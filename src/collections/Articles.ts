@@ -38,14 +38,15 @@ export const Articles: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: [
       'title',
-      // Denormalized snapshot of the author's full name. The `Author`
-      // relationship is no longer readable by non-admins (users collection
-      // is locked down), so a relationship column would render raw IDs for
-      // authors the current user cannot read.
-      'authorName',
       'section',
-      'status',
+      // Renders the author's full name (users `useAsTitle`) for users with
+      // read access to the related user doc. For non-admin roles (copy,
+      // article authors) without that read access, the column falls back to
+      // the raw user ID — swap in `authorName` (the denormalized snapshot)
+      // if that becomes a problem.
+      'Author',
       'workflowStatus',
+      'status',
       'createdAt',
       'updatedAt',
     ],

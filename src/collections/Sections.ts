@@ -4,6 +4,7 @@ export const Section: CollectionConfig = {
   slug: 'sections',
   admin: {
     useAsTitle: 'primaryTitle', // Use the new derived field as the title
+    defaultColumns: ['primaryTitle', 'sectionName.Description', 'createdAt'],
   },
   labels: {
     singular: 'Section',

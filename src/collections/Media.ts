@@ -8,6 +8,7 @@ export const Media: CollectionConfig = {
     useAsTitle: 'mediaTitle',
     description: 'Upload images, videos, and audio files.',
     group: 'Digital Assets',
+    defaultColumns: ['mediaTitle', 'internalNotes', 'usedInArticles', 'createdAt'],
   },
   folders: true,
   access: {
