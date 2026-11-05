@@ -1,5 +1,25 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, FieldAccess } from 'payload'
 import { ValidationError } from 'payload'
+
+/**
+ * Access control for the `internalNotes` field: working notes, not public
+ * metadata. Visible to the admin, editor, and author roles, plus to the
+ * user credited on the media doc (its `user` field, which defaults to the
+ * uploader — the "owner"). Field access only accepts boolean results, so in
+ * list contexts (where `doc` is unavailable) the field is hidden for
+ * non-privileged roles; owners see their notes in the doc view.
+ */
+const canAccessInternalNotes: FieldAccess = ({ req: { user }, doc }) => {
+  if (!user) return false
+
+  if (user.Role === 'admin' || user.Role === 'editor' || user.Role === 'author') {
+    return true
+  }
+
+  const ownerId =
+    doc?.user != null && typeof doc.user === 'object' ? doc.user.id : doc?.user
+  return ownerId != null && ownerId === user.id
+}
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -76,14 +96,8 @@ export const Media: CollectionConfig = {
       label: 'Internal Notes',
       type: 'textarea',
       access: {
-        read: ({ req: { user } }) => {
-          if (!user) return false
-          return user.Role === 'admin' || user.Role === 'editor'
-        },
-        update: ({ req: { user } }) => {
-          if (!user) return false
-          return user.Role === 'admin' || user.Role === 'editor'
-        },
+        read: canAccessInternalNotes,
+        update: canAccessInternalNotes,
       },
     },
     {
