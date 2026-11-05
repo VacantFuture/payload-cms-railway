@@ -341,6 +341,14 @@ export interface Article {
    * Copied from the author profile when the article is saved. To change it, edit the author.
    */
   authorName?: string | null;
+  /**
+   * Copied from the author profile when the article is saved. To change it, edit the author.
+   */
+  authorRole?: string | null;
+  /**
+   * Copied from the author profile when the article is saved. To change it, edit the author.
+   */
+  authorAffiliation?: string | null;
   section: number | Section;
   sectionFeatured: 'yes' | 'no';
   /**
@@ -846,6 +854,8 @@ export interface ArticlesSelect<T extends boolean = true> {
   workflowStatus?: T;
   Author?: T;
   authorName?: T;
+  authorRole?: T;
+  authorAffiliation?: T;
   section?: T;
   sectionFeatured?: T;
   owner?: T;

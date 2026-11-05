@@ -102,11 +102,11 @@ export const Articles: CollectionConfig = {
   /** Hooks to run at different stages of the document lifecycle. */
   hooks: {
     beforeChange: [
-      // Snapshot the author's full name onto the article. The public site's
-      // bylines read this field so they never depend on read access to the
-      // users collection, which is restricted to admins and the user themself.
-      // Runs on every save where an author is present so renames propagate
-      // when an article is next edited.
+      // Snapshot the author's byline fields (name, role, affiliation) onto
+      // the article. The public site's bylines read these fields so they never
+      // depend on read access to the users collection, which is restricted to
+      // admins and the user themself. Runs on every save where an author is
+      // present so profile edits propagate when an article is next edited.
       async ({ data, req }) => {
         if (data.Author != null) {
           const authorId =
@@ -123,8 +123,16 @@ export const Articles: CollectionConfig = {
               overrideAccess: true,
             })
             .catch(() => null) // author may have been deleted; keep the existing snapshot
-          if (author?.fullName) {
-            data.authorName = author.fullName
+          if (author) {
+            if (author.fullName) {
+              data.authorName = author.fullName
+            }
+            // Role/affiliation are written unconditionally (including null) so
+            // that clearing a field on the profile also propagates on the
+            // article's next save — a truthy-only guard would keep stale values
+            // forever.
+            data.authorRole = author.authorRole ?? null
+            data.authorAffiliation = author.authorAffiliation ?? null
           }
         }
         return data
@@ -227,6 +235,37 @@ export const Articles: CollectionConfig = {
     {
       name: 'authorName',
       label: 'Author Name',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description:
+          'Copied from the author profile when the article is saved. To change it, edit the author.',
+      },
+    },
+    /**
+     * Denormalized snapshot of the author's role at last save.
+     * Maintained by the beforeChange hook — never edited by hand. Rendered in
+     * the public byline as "Role at Affiliation" (or whichever is set).
+     */
+    {
+      name: 'authorRole',
+      label: 'Author Role',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description:
+          'Copied from the author profile when the article is saved. To change it, edit the author.',
+      },
+    },
+    /**
+     * Denormalized snapshot of the author's affiliation at last save.
+     * Maintained by the beforeChange hook — never edited by hand.
+     */
+    {
+      name: 'authorAffiliation',
+      label: 'Author Affiliation',
       type: 'text',
       admin: {
         position: 'sidebar',
