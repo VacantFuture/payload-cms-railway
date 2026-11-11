@@ -4,22 +4,10 @@ import { useRowLabel } from '@payloadcms/ui'
 
 export default function ArrayRowLabel() {
   const { data, rowNumber } = useRowLabel<{
-    Title?: string
-    Role?: string
-    Platform?: string
-    Date?: string
+    title?: string | null
   }>()
 
-  console.log(data, rowNumber)
-  // {} undefined
-
-  // Convert the Date to a human-readable format if it exists
-  const formattedDate = data.Date ? new Date(data.Date).toLocaleDateString() : null
-
-  const customLabel = `${data.Title || data.Role || data.Platform || formattedDate || 'Info'}`
-  console.log(customLabel)
-  console.log(data)
-  // Example: "Project Title" or "October 1, 2023"
+  const customLabel = data.title || `Note ${rowNumber}`
 
   return <div>{customLabel}</div>
 }
